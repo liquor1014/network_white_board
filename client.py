@@ -6,6 +6,7 @@ from whiteboard import WhiteBoard
 
 
 class Client(Thread,WhiteBoard):
+    Objects = {'line': 'L', 'oval': 'O', 'circle': 'C', 'rectangle': 'R', 'square': 'S', 'erase': 'E', 'drag': 'DR'}
 
     def __init__(self):
         self.conn = Connection()
@@ -18,6 +19,9 @@ class Client(Thread,WhiteBoard):
         self.y_pos = None
         self.last_time = None
 
+        self.x1_line, self.y1_line, self.x2_line, self.y2_line = None, None, None, None
+
+
     def _init_mouse_event(self):
         self.drawing_area.bind("<Motion>", self.motion)
         self.drawing_area.bind("<ButtonPress-1>", self.left_but_down)
@@ -29,6 +33,9 @@ class Client(Thread,WhiteBoard):
         self.isMouseDown = True
         self.x_pos = event.x
         self.y_pos = event.y
+
+        self.x1_line,self.y1_line = event.x ,event.y
+
         self.last_time = time.time()
 
 
@@ -37,10 +44,22 @@ class Client(Thread,WhiteBoard):
         print(event.x,event.y)
         self.last_time=None
 
+        self.x2_line , self.y2_line = event.x , event.y
+        self.draw_one_obj()
+
+    def draw_one_obj(self):
+        tool = self.drawing_tool
+        if tool not in Client.Objects.keys():
+            return
+        else:
+            cmd_type = Client.Objects[tool]
+            msg = (cmd_type, self.x1_line, self.y1_line, self.x2_line, self.y2_line, 'red')
+            self.conn.send_message(msg)
+
     # (tpye，startx,starty,endx,endy,color)
     # ('D',startx,starty,endx,endy,'red')
     def motion(self,event=None):
-        if self.isMouseDown == True:
+        if self.isMouseDown == True and self.drawing_tool == 'pencil':
             now = time.time()
             if now - self.last_time < 0.02:
                 print('too fast')
@@ -58,7 +77,7 @@ class Client(Thread,WhiteBoard):
         while True:
             msg = self.conn.receive_msg()
             self.draw_from_msg(msg)
-            print(msg)
+            # print(msg)
             if msg == 'xxx':
                 pass
             # print('i am running')

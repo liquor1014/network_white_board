@@ -82,11 +82,11 @@ class Client:
                 msg += data
                 if data == 'Ø':
                     break
-            print(msg)
+            # print(msg)
             # time.sleep(0.1)
             Server.logs[Client.msgID] = msg
 
-            if msg[0]=='D':
+            if msg[0] in ['O', 'C', 'L', 'R', 'S', 'E', 'D', 'Z', 'T']:
                 self.broadcast2Clients(msg)
 
             Client.msgID += 1
