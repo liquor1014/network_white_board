@@ -1,15 +1,15 @@
 import math
+
 from tkinter import *
 from tkinter import font
-
 from userdialog import UserDialog
 
 
 class WhiteBoard:
     drawing_tool = "line"
     # Here we have the dictionary with the used colors to paint!
-    # Colors = {'b': 'blue', 'r': 'red', 'g': 'green', 'o': 'orange', 'y': 'yellow', 'c': 'cyan', 'p': 'purple1',
-    #           'd': 'black', 's': 'snow'}
+    Colors = {'b': 'blue', 'r': 'red', 'g': 'green', 'o': 'orange', 'y': 'yellow', 'c': 'cyan', 'p': 'purple1',
+              'd': 'black', 's': 'snow'}
     line_width = 2
 
     def draw_pencil(self, msgLst):
@@ -84,7 +84,7 @@ class WhiteBoard:
             pass
 
     def __init__(self):
-        self.color = 'b'
+        self.color = 'black'
         self.init_whiteboard()
         self._init_item_button()
         self._init_color_button()
@@ -112,7 +112,7 @@ class WhiteBoard:
 
     def set_color(self, color):
         print(color)
-        self.color = color
+        self.color = self.Colors[color]
 
     def get_text_from_user(self):
         WhiteBoard.drawing_tool = 'text'
@@ -137,6 +137,7 @@ class WhiteBoard:
                command=lambda: self.set_drawing_tool('eraser')).place(x=560, y=0)
         Button(self.myWhiteBoard, text='drag', height=1, width=5, bg='green', font='Arial',
                command=lambda: self.set_drawing_tool('drag')).place(x=630, y=0)
+
     def _init_color_button(self):
 
         Button(self.myWhiteBoard, height=1, width=5, bg='red',

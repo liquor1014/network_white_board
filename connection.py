@@ -1,5 +1,5 @@
 import socket
-import time
+
 from userdialog import UserDialog
 
 

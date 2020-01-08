@@ -1,6 +1,6 @@
 import time
-from threading import Thread
 
+from threading import Thread
 from connection import Connection
 from userdialog import UserDialog
 from whiteboard import WhiteBoard
@@ -66,7 +66,7 @@ class Client(Thread,WhiteBoard):
 
     def draw_text(self):
         text_to_draw = UserDialog._Text
-        msg = ('T', self.x1_line, self.y1_line, 'red', text_to_draw)
+        msg = ('T', self.x1_line, self.y1_line, self.color, text_to_draw)
         self.conn.send_message(msg)
 
     def draw_one_obj(self):
@@ -75,7 +75,7 @@ class Client(Thread,WhiteBoard):
             return
         else:
             cmd_type = Client.Objects[tool]
-            msg = (cmd_type, self.x1_line, self.y1_line, self.x2_line, self.y2_line, 'red')
+            msg = (cmd_type, self.x1_line, self.y1_line, self.x2_line, self.y2_line, self.color)
             self.conn.send_message(msg)
 
     # (tpye，startx,starty,endx,endy,color)
@@ -89,7 +89,7 @@ class Client(Thread,WhiteBoard):
 
             self.last_time = now
 
-            msg = ('D', self.x_pos, self.y_pos, event.x, event.y, 'red')
+            msg = ('D', self.x_pos, self.y_pos, event.x, event.y, self.color)
             self.conn.send_message(msg)
             self.x_pos = event.x
             self.y_pos = event.y
